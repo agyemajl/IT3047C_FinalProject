@@ -1,0 +1,47 @@
+﻿@model List<TeamMember>
+@{
+    ViewData["Title"] = "Team Members";
+}
+<h1 class="mb-3">Team Members</h1>
+
+@if (TempData["SuccessMessage"] is string successMessage)
+{
+    <div class="alert alert-success" role="alert">
+        @successMessage
+    </div>
+}
+
+<a asp-action="Create" class="btn btn-primary mb-3">Add team member</a>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover table-bordered align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">M Number</th>
+                <th scope="col">Email</th>
+                <th scope="col">GitHub Username</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var member in Model)
+            {
+                <tr>
+                    <td>@member.Id</td>
+                    <td>@member.Name</td>
+                    <td>@member.MNumber</td>
+                    <td>@member.Email</td>
+                    <td>@member.GitHubUsername</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@member.Id" class="btn btn-sm btn-outline-primary">Edit</a>
+                        <form asp-action="DeleteFromList" asp-route-id="@member.Id" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
