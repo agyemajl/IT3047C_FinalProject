@@ -29,7 +29,6 @@ namespace IT3047C_FinalProject.Controllers
         }
 
         [HttpPost("create")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(TeamMember teamMember)
         {
             if (!ModelState.IsValid)
@@ -43,7 +42,7 @@ namespace IT3047C_FinalProject.Controllers
             return RedirectToAction(nameof(GetTeamMembers));
         }
 
-        [HttpGet("edit/{id:int}")]
+        [HttpGet("edit/{id}")]
         public async Task<IActionResult> Edit(int id)
         {
             var teamMember = await _context.TeamMembers.FindAsync(id);
@@ -55,8 +54,7 @@ namespace IT3047C_FinalProject.Controllers
             return View(teamMember);
         }
 
-        [HttpPost("edit/{id:int}")]
-        [ValidateAntiForgeryToken]
+        [HttpPost("edit/{id}")]
         public async Task<IActionResult> Edit(int id, TeamMember teamMember)
         {
             if (!ModelState.IsValid)
@@ -80,47 +78,7 @@ namespace IT3047C_FinalProject.Controllers
             return RedirectToAction(nameof(GetTeamMembers));
         }
 
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update(int id, [FromBody] TeamMember teamMember)
-        {
-            if (!ModelState.IsValid)
-            {
-                return ValidationProblem(ModelState);
-            }
-
-            var existingMember = await _context.TeamMembers.FindAsync(id);
-            if (existingMember is null)
-            {
-                return NotFound(new { message = "Team member not found." });
-            }
-
-            existingMember.Name = teamMember.Name;
-            existingMember.MNumber = teamMember.MNumber;
-            existingMember.Email = teamMember.Email;
-            existingMember.GitHubUsername = teamMember.GitHubUsername;
-
-            await _context.SaveChangesAsync();
-
-            return Ok(new { message = "Team member updated." });
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var teamMember = await _context.TeamMembers.FindAsync(id);
-            if (teamMember is null)
-            {
-                return NotFound(new { message = "Team member not found." });
-            }
-
-            _context.TeamMembers.Remove(teamMember);
-            await _context.SaveChangesAsync();
-
-            return Ok(new { message = "Team member deleted." });
-        }
-
-        [HttpPost("delete/{id:int}")]
-        [ValidateAntiForgeryToken]
+        [HttpPost("delete/{id}")]
         public async Task<IActionResult> DeleteFromList(int id)
         {
             var teamMember = await _context.TeamMembers.FindAsync(id);
